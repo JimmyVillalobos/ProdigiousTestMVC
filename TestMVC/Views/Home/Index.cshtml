@@ -1,0 +1,58 @@
+﻿<div id="body">
+    <section class="featured">
+        <div class="content-wrapper">
+        </div>
+    </section>
+    <section class="content-wrapper main-content clear-fix">
+        <form action="api/product" method="post">
+            <table>
+                <tr>
+                    <td>Name</td>
+                    <td><input name="Name" id="Name" type="text" /></td>
+                </tr>
+                <tr>
+                    <td>ProductNumber</td>
+                    <td><input name="ProductNumber" id="ProductNumber" type="text" /></td>
+                </tr>
+            </table>
+            <input type="submit" value="Add">
+        </form>
+
+        <div ng-controller="ProductController as cntrl" ng-init="cntrl.initialize()">
+            <div ng-if="cntrl.isLoading"><img src="~/Images/loading.svg" height="100"></div>
+
+            <div ng-if="!cntrl.isLoading">
+                <div class="row" ng-repeat="product in cntrl.products">
+                    <div><a href="" ng-click="cntrl.getProduct(product.Id)">{{product.ProductNumber}}</a> - {{product.Name}}</div>
+                </div>
+
+                <div>productid {{cntrl.selectedProduct.ProductID}}</div>
+                <div ng-show="cntrl.selectedProduct.ProductID != 0">
+                    <div ng-show="!wantChange">
+                        <h3> {{cntrl.selectedProduct.Name}} - {{cntrl.selectedProduct.ProductNumber}}</h3>
+                        <div>Weight: {{cntrl.selectedProduct.Weight}} </div>
+                        <div>Size: {{cntrl.selectedProduct.Size}} </div>
+                        <button ng-click="wantChange = true">Change</button>
+                    </div>
+                    <div ng-show="wantChange">
+                        <form action="{{cntrl.UpdateAction}}" method="put" if-match="*">
+                            <table>
+                                <tr>
+                                    <td>Name</td>
+                                    <td><input name="Name" id="Name" type="text" value="{{cntrl.selectedProduct.Name}}" /></td>
+                                </tr>
+                                <tr>
+                                    <td>ProductNumber</td>
+                                    <td><input name="ProductNumber" id="ProductNumber" type="text" value="{{cntrl.selectedProduct.ProductNumber}}" /></td>
+                                </tr>
+                            </table>
+                            <input type="submit" value="Update">
+                            <input type="hidden" name="_method" value="put" />
+                            <input type="button" ng-click="wantChange = false" value="Cancel" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
